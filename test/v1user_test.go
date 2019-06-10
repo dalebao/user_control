@@ -4,6 +4,7 @@ import (
 	"encoding/xml"
 	"fmt"
 	"github.com/dalebao/user_control/logic"
+	"github.com/dalebao/user_control/pkg/redis"
 	"github.com/dalebao/user_control/pkg/sign"
 	"github.com/dalebao/user_control/pkg/sms"
 	"testing"
@@ -36,3 +37,6 @@ func TestSign(t *testing.T){
 	fmt.Println(b)
 }
 
+func TestRedis(t *testing.T){
+	redis.Test()
+}

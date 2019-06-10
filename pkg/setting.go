@@ -17,8 +17,14 @@ var (
 	JwtSecret  string
 	TjwtSecret string
 	SignSecret string
-	SmsUrl string
+	SmsUrl     string
 )
+
+type RedisConfig struct {
+	Host     string
+	Password string
+	Db       int
+}
 
 const Dir = "/Users/DamnGenius/go/src/github.com/dalebao/user_control"
 
@@ -64,4 +70,15 @@ func LoadApp() {
 	PageSize = sec.Key("PAGE_SIZE").MustInt(10)
 	SignSecret = sec.Key("SIGN_SECRET").MustString("abcs")
 	SmsUrl = sec.Key("SMS_URL").MustString("")
+}
+
+func (redisConfig *RedisConfig)LoadRedis() {
+	sec, err := Cfg.GetSection("redis")
+	if err != nil {
+		log.Fatalf("Fail to get section 'redis': %v", err)
+	}
+
+	redisConfig.Host = sec.Key("REDIS_HOST").MustString("localhost:3306")
+	redisConfig.Password = sec.Key("REDIS_PASSWORD").MustString("")
+	redisConfig.Db = sec.Key("REDIS_DB").MustInt(0)
 }
