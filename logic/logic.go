@@ -5,6 +5,7 @@ import (
 	"errors"
 	"fmt"
 	"github.com/dalebao/user_control/models"
+	"github.com/dalebao/user_control/pkg"
 	"github.com/dalebao/user_control/pkg/sms"
 	"github.com/dalebao/user_control/pkg/request"
 )
@@ -41,7 +42,7 @@ func GetVerifyCodeForRAndL(guard, mobile string) error {
 	params["mobile"] = mobile
 	params["sendtime"] = ""
 
-	smsResultXml := request.HttpPostForm("http://115.28.50.135:8888/sms.aspx?action=send", params)
+	smsResultXml := request.HttpPostForm(setting.SmsUrl, params)
 
 	smsResult := smsSetting.SmsResult{}
 	err := xml.Unmarshal([]byte(smsResultXml), &smsResult)

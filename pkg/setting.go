@@ -17,6 +17,7 @@ var (
 	JwtSecret  string
 	TjwtSecret string
 	SignSecret string
+	SmsUrl string
 )
 
 const Dir = "/Users/DamnGenius/go/src/github.com/dalebao/user_control"
@@ -62,4 +63,5 @@ func LoadApp() {
 	TjwtSecret = sec.Key("T_JWT_SECRET").MustString("!@)*#)!@U@@@#@*!@!)")
 	PageSize = sec.Key("PAGE_SIZE").MustInt(10)
 	SignSecret = sec.Key("SIGN_SECRET").MustString("abcs")
+	SmsUrl = sec.Key("SMS_URL").MustString("")
 }
