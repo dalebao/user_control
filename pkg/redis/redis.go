@@ -15,7 +15,6 @@ func init() {
 func dial() {
 	redisConfig := &setting.RedisConfig{}
 	redisConfig.LoadRedis()
-	fmt.Println(redisConfig)
 
 	Client = redis.NewClient(&redis.Options{
 		Addr:     redisConfig.Host,
@@ -23,10 +22,10 @@ func dial() {
 		DB:       redisConfig.Db,       // use default DB
 	})
 
-	pong, err := Client.Ping().Result()
-	fmt.Println(pong, err)
+	_, err := Client.Ping().Result()
+	if err != nil {
+		fmt.Println("链接redis出错",err)
+	}
+
 }
 
-func Test() {
-	Client.Set("test", "112", 0)
-}

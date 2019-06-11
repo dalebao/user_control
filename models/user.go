@@ -55,6 +55,11 @@ func findUserByNameOrMobile(name, mobile string) bool {
 	return false
 }
 
+func FindUserByMobile(mobile string) (user User) {
+	db.Where("mobile = ?", mobile).First(&user)
+	return
+}
+
 func Login(name, password string) (user User, err error) {
 	db.Where("name = ? and password = ?", name, password).First(&user)
 	if user.ID > 0 {

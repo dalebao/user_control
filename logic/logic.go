@@ -6,8 +6,10 @@ import (
 	"fmt"
 	"github.com/dalebao/user_control/models"
 	"github.com/dalebao/user_control/pkg"
-	"github.com/dalebao/user_control/pkg/sms"
 	"github.com/dalebao/user_control/pkg/request"
+	"github.com/dalebao/user_control/pkg/sms"
+	"github.com/dalebao/user_control/pkg/verifyCode"
+	"strings"
 )
 
 /**
@@ -33,12 +35,26 @@ func GetVerifyCodeForRAndL(guard, mobile string) error {
 	smsConfig := &smsSetting.SmsConfig{}
 	smsConfig.LoadConfig(guard)
 
+	action := "register"
+	content := smsConfig.RContent
+
+	user := models.FindUserByMobile(mobile)
+	if user.ID > 0 {
+		action = "login"
+		content = smsConfig.LContent
+	}
+
+	v := &verifyCode.VerifyCode{Mobile: mobile, Guard: guard, Action: action}
+	v.GenerateVerifyCode()
+
+	content = strings.Replace(content, "verifyCode", v.Code, 1)
+
 	params := make(map[string]string)
 
 	params["userid"] = smsConfig.UserId
 	params["account"] = smsConfig.Account
 	params["password"] = smsConfig.Password
-	params["content"] = smsConfig.RContent
+	params["content"] = content
 	params["mobile"] = mobile
 	params["sendtime"] = ""
 
@@ -54,6 +70,8 @@ func GetVerifyCodeForRAndL(guard, mobile string) error {
 	if (smsResult.ReturnStatus != "Success") {
 		return errors.New("短信发送失败")
 	}
+	//保存验证码
+	v.SaveVerifyCode()
 
 	return nil
 }

@@ -4,9 +4,9 @@ import (
 	"encoding/xml"
 	"fmt"
 	"github.com/dalebao/user_control/logic"
-	"github.com/dalebao/user_control/pkg/redis"
 	"github.com/dalebao/user_control/pkg/sign"
 	"github.com/dalebao/user_control/pkg/sms"
+	"github.com/dalebao/user_control/pkg/verifyCode"
 	"testing"
 )
 
@@ -32,11 +32,17 @@ func TestXml(t *testing.T) {
 	fmt.Println(smsResult.ReturnStatus)
 }
 
-func TestSign(t *testing.T){
-	b := sign.ValidateSign("wyche","ad69858b32e652bc8f533076349f743b")
+func TestSign(t *testing.T) {
+	b := sign.ValidateSign("wyche", "ad69858b32e652bc8f533076349f743b")
 	fmt.Println(b)
 }
 
-func TestRedis(t *testing.T){
-	redis.Test()
+func TestRedis(t *testing.T) {
+
+}
+
+func TestVerifyCode(t *testing.T) {
+	verifycodes := &verifyCode.VerifyCode{Mobile: "17681884921", Guard: "wcyhe", Action: "register"}
+	verifycodes.GenerateVerifyCode()
+	fmt.Println(verifycodes)
 }
