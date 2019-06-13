@@ -187,11 +187,9 @@ func RegisterLoginGetVerifyCode(c *gin.Context) {
 	mobile := c.PostForm("mobile")
 	guard := c.PostForm("guard")
 
-
 	valid := validation.Validation{}
 	valid.Required(mobile, "mobile").Message("手机号必填")
 	valid.Required(guard, "guard").Message("门卫必填")
-
 
 	err := logic.GetVerifyCodeForRAndL(guard, mobile)
 	if err != nil {
@@ -208,5 +206,22 @@ func RegisterLoginGetVerifyCode(c *gin.Context) {
 		"msg":  err,
 		"data": "",
 	})
+
+}
+
+/**
+使用验证码 登录注册
+ */
+func RegisterLoginWithVerifyCode(c *gin.Context) {
+	mobile := c.PostForm("mobile")
+	guard := c.PostForm("guard")
+	enterVC := c.PostForm("verifyCode")
+
+	valid := validation.Validation{}
+	valid.Required(mobile, "mobile").Message("手机号必填")
+	valid.Required(guard, "guard").Message("门卫必填")
+	valid.Required(enterVC, "verifyCode").Message("验证码必填")
+
+
 
 }

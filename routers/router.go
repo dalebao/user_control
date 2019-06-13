@@ -13,8 +13,8 @@ func InitRouter() *gin.Engine {
 
 	r.Use(gin.Recovery())
 
-	r.Use(middleware.GuardMiddleware())//验证guard
-	r.Use(middleware.ValidateSignSKey())//验证签名
+	r.Use(middleware.GuardMiddleware())  //验证guard
+	r.Use(middleware.ValidateSignSKey()) //验证签名
 
 	gin.SetMode(setting.RunMode)
 
@@ -22,7 +22,9 @@ func InitRouter() *gin.Engine {
 
 	{
 		//登录或注册获取验证码
-		apiv1.POST("/registerOrLoginGetVerifyCode",v1.RegisterLoginGetVerifyCode)
+		apiv1.POST("/registerOrLoginGetVerifyCode", v1.RegisterLoginGetVerifyCode)
+		//使用验证码登录或注册
+		apiv1.POST("/registerOrLoginWithVerifyCode", v1.RegisterLoginWithVerifyCode)
 		//获取用户列表
 		apiv1.GET("/users", v1.GetUsers)
 		//注册

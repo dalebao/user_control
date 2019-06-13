@@ -76,6 +76,38 @@ func GetVerifyCodeForRAndL(guard, mobile string) error {
 	return nil
 }
 
+func RAndLWithVerifyCode(guard, mobile, VC string) (map[string]interface{}, error) {
+	eUser := models.FindUserByMobile(mobile)
+	action := "register"
+	if eUser.ID > 0 {
+		action = "login"
+	}
+	res := make(map[string]interface{})
+
+	verifyC := &verifyCode.VerifyCode{Guard: guard, Mobile: mobile, Code: VC, Action: action}
+	err := verifyC.ValidateVerifyCode()
+	if err != nil {
+		return res, errors.New(err.Error())
+	}
+
+	var user models.User
+	if action == "register" {
+		user, err = models.CreateUserByMobile(mobile)
+
+	}
+
+	if err != nil {
+		return res, errors.New("注册失败")
+	}
+
+	token, err := GenerateUToken(user.Name, user.Uuid, guard)
+
+	res["user"] = user
+	res["uToken"] = token
+
+	return res, nil
+}
+
 /**
 账号密码登录
  */

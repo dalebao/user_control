@@ -15,6 +15,11 @@ func TestGetVerifyCodeForRAndL(t *testing.T) {
 	fmt.Println(err)
 }
 
+func TestVerifyCodeLoginRegister(t *testing.T) {
+	res, err := logic.RAndLWithVerifyCode("wyche", "17681884921", "2457")
+	fmt.Println(res, err)
+}
+
 func TestXml(t *testing.T) {
 	xmlString := `<?xml version="1.0"  ="utf-8" ?><returnsms>
  <returnstatus>Success</returnstatus>
@@ -38,7 +43,9 @@ func TestSign(t *testing.T) {
 }
 
 func TestRedis(t *testing.T) {
-
+	v := &verifyCode.VerifyCode{Mobile: "17681884921", Action: "login", Guard: "wyche", Code: "123"}
+	err := v.ValidateVerifyCode()
+	fmt.Println(err)
 }
 
 func TestVerifyCode(t *testing.T) {
@@ -46,3 +53,5 @@ func TestVerifyCode(t *testing.T) {
 	verifycodes.GenerateVerifyCode()
 	fmt.Println(verifycodes)
 }
+
+

@@ -44,9 +44,35 @@ func CreateUser(name, password, mobile string) (user User, err error) {
 	return user, nil
 }
 
+func CreateUserByMobile(mobile string) (user User, err error) {
+	exists := findUserByMobile(mobile)
+
+	if exists == true {
+		return User{}, errors.New("用户名与手机号重复")
+	}
+
+	user = User{ Mobile: mobile, Uuid: uuid.New().String(),Password: "123456"}
+
+	res := db.Save(&user)
+	fmt.Println(res)
+
+	return user, nil
+}
+
 func findUserByNameOrMobile(name, mobile string) bool {
 	user := User{}
 	db.Where("name = ? or mobile = ? ", name, mobile).First(&user)
+
+	if user.ID > 0 {
+		return true
+	}
+
+	return false
+}
+
+func findUserByMobile(mobile string) bool {
+	user := User{}
+	db.Where("mobile = ? ", mobile).First(&user)
 
 	if user.ID > 0 {
 		return true
